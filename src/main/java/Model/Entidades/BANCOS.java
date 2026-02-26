@@ -1,4 +1,4 @@
-import java.util.Collection;
+import jakarta.persistence.Entity;
 
 public class BANCOS {
 
@@ -6,6 +6,5 @@ public class BANCOS {
 
 	private String BANCOS_NOME;
 
-	private Collection<Conta> conta;
 
 }
