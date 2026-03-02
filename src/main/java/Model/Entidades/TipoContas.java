@@ -1,22 +1,21 @@
 package Model.Entidades;
 
-
 import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "BANCOS")
-public class Bancos {
+@Table(name = "Tipo_Contas")
+public class TipoContas {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "BANCOS_ID")
+    @Column(name = "TIPOCONTAS_ID")
     private Long id;
 
-    @Column(name = "BANCOS_NOME", length = 45)
+    @Column(name = "TIPOCONTAS_NOME", length = 45)
     private String nome;
 
-    @OneToMany(mappedBy = "banco", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "tipoContas", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Contas> contas;
 
     public Long getId() { return id; }
