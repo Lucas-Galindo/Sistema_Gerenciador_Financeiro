@@ -64,4 +64,12 @@ public class Usuario {
     public void setCartoes(List<Cartoes> cartoes) { this.cartoes = cartoes; }
     public Localizacao getLocalizacao() { return localizacao; }
     public void setLocalizacao(Localizacao localizacao) { this.localizacao = localizacao; }
+
+    public Usuario(String nome, String cpf, String email, String senha, String telefone) {
+        this.nome = nome;
+        this.cpf = cpf;
+        this.email = email;
+        this.senha = senha;
+        this.telefone = telefone;
+    }
 }
