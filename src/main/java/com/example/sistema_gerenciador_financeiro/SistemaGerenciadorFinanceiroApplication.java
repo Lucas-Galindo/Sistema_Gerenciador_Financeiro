@@ -2,13 +2,12 @@ package com.example.sistema_gerenciador_financeiro;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.hibernate.autoconfigure.HibernateJpaAutoConfiguration;
-import org.springframework.boot.jdbc.autoconfigure.DataSourceAutoConfiguration;
 
-@SpringBootApplication(
-        scanBasePackages = {"com.example.sistema_gerenciador_financeiro", "Model"},
-        exclude = {DataSourceAutoConfiguration.class, HibernateJpaAutoConfiguration.class}
-)
+@SpringBootApplication(scanBasePackages = {
+        "com.example.sistema_gerenciador_financeiro",
+        "Model.Controller",
+        "Model.Service"
+})
 public class SistemaGerenciadorFinanceiroApplication {
 
     public static void main(String[] args) {

@@ -1,5 +1,6 @@
 package Model.Entidades;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -27,6 +28,7 @@ public class Cartoes {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Usuario_USU_ID", nullable = false)
+    @JsonIgnoreProperties(value = {"metas", "transacoes", "contas", "cartoes", "localizacao"}, allowSetters = true)
     private Usuario usuario;
 
     public Long getId() { return id; }

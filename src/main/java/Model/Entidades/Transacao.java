@@ -1,5 +1,6 @@
 package Model.Entidades;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 
@@ -23,18 +24,22 @@ public class Transacao {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Categoria_CAT_ID", nullable = false)
+    @JsonIgnoreProperties(value = {"transacoes"}, allowSetters = true)
     private Categoria categoria;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Usuario_USU_ID", nullable = false)
+    @JsonIgnoreProperties(value = {"metas", "transacoes", "contas", "cartoes", "localizacao"}, allowSetters = true)
     private Usuario usuario;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TIPO_TRANSACAO_TIPO_TRANSACAO_ID", nullable = false)
+    @JsonIgnoreProperties(value = {"transacoes"}, allowSetters = true)
     private TipoTransacao tipoTransacao;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Contas_CONTAS_ID", nullable = false)
+    @JsonIgnoreProperties(value = {"transacoes"}, allowSetters = true)
     private Contas conta;
 
     public Long getId() { return id; }

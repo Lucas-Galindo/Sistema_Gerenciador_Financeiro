@@ -1,119 +1,77 @@
 package Model.Controller;
 
+import Model.Entidades.Erro;
 import Model.Entidades.Usuario;
-import Model.Repository.UsuarioRepository;
+import Model.Service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("usuarios")
+@RequestMapping("usuario")
 public class UsuarioController {
-
     @Autowired
-    private UsuarioRepository usuarioRepository;
+    private UsuarioService usuarioService;
 
-    @GetMapping("test")
-    public ResponseEntity<Object> teste() {
-        return ResponseEntity.ok().build();
+    @GetMapping("get-all")
+    public ResponseEntity<Object> getAllUsuario() {
+        return ResponseEntity.ok(usuarioService.getAll());
     }
 
-    @GetMapping("list-usuarios")
-    public ResponseEntity<Object> listarUsuarios() {
-        List<Usuario> usuarios = usuarioRepository.getUsuarios();
-        return ResponseEntity.ok().body(usuarios);
+    @GetMapping("get-by-id/{id}")
+    public ResponseEntity<Object> getById(@PathVariable Long id) {
+        Usuario usuario = usuarioService.getId(id);
+        if (usuario != null) {
+            return ResponseEntity.ok(usuario);
+        }
+        return ResponseEntity.badRequest().body(new Erro("Usuario nao existe"));
     }
 
-    @PostMapping("cadastro-usuario")
-    public ResponseEntity<Object> cadastroUsuario(@RequestBody Usuario usuario) {
-        if(usuario.getNome() == null || usuario.getNome().trim().isEmpty()
-                || usuario.getCpf() == null || usuario.getCpf().trim().isEmpty()
-                || usuario.getEmail() == null || usuario.getEmail().trim().isEmpty()
-                || usuario.getSenha() == null || usuario.getSenha().trim().isEmpty()
-                || usuario.getTelefone() == null || usuario.getTelefone().trim().isEmpty()) {
-            return ResponseEntity.badRequest().body("Preencha todos os campos");
+    @GetMapping("get-by-email/{email}")
+    public ResponseEntity<Object> getByEmail(@PathVariable String email) {
+        Usuario usuario = usuarioService.getByEmail(email);
+        if (usuario != null) {
+            return ResponseEntity.ok(usuario);
         }
-
-        if(usuarioRepository.existsByCpf(usuario.getCpf())) {
-            return ResponseEntity.badRequest().body("CPF já cadastrado");
-        }
-
-        if(usuarioRepository.existsByEmail(usuario.getEmail())) {
-            return ResponseEntity.badRequest().body("E-mail já cadastrado");
-        }
-
-        if(usuarioRepository.existsByPhone(usuario.getTelefone())) {
-            return ResponseEntity.badRequest().body("Telefone já cadastrado");
-        }
-
-        usuarioRepository.add(usuario);
-        return ResponseEntity.ok().body("Usuário cadastrado com sucesso");
+        return ResponseEntity.badRequest().body(new Erro("E-mail nao encontrado"));
     }
-    @GetMapping("login")
-    public ResponseEntity<Object> loginUsuario(@RequestParam String email, @RequestParam String senha) {
-        Usuario usuario = usuarioRepository.findByEmailAndSenha(email, senha);
+
+    @GetMapping("get-by-cpf/{cpf}")
+    public ResponseEntity<Object> getByCpf(@PathVariable String cpf) {
+        Usuario usuario = usuarioService.getByCpf(cpf);
+        if (usuario != null) {
+            return ResponseEntity.ok(usuario);
+        }
+        return ResponseEntity.badRequest().body(new Erro("CPF nao encontrado"));
+    }
+
+    @GetMapping("get-by-keyword/{kw}")
+    public ResponseEntity<Object> getByKeyWord(@PathVariable String kw) {
+        return ResponseEntity.ok(usuarioService.getByKeyWord(kw));
+    }
+
+    @PostMapping
+    public ResponseEntity<Object> add(@RequestBody Usuario usuario) {
+        usuario = usuarioService.save(usuario);
         if (usuario != null) {
             return ResponseEntity.ok().body(usuario);
         }
-        return ResponseEntity.badRequest().body("E-mail ou senha incorretos");
+        return ResponseEntity.badRequest().body(new Erro("Erro ao salvar"));
     }
-    @GetMapping("buscar-usuario-email")
-    public ResponseEntity<Object> buscarUsuarioEmail(@RequestParam String email){
-        Usuario usuario = null;
-        for (Usuario u : usuarioRepository.getUsuarios()){
-            if(u.getEmail().equalsIgnoreCase(email))
-                usuario = u;
-        }
-        if(usuario != null){
+
+    @PutMapping
+    public ResponseEntity<Object> update(@RequestBody Usuario usuario) {
+        if (usuarioService.save(usuario) != null) {
             return ResponseEntity.ok().body(usuario);
         }
-        return ResponseEntity.badRequest().body("E-mail não encontrado");
+        return ResponseEntity.badRequest().body(new Erro("Erro ao alterar"));
     }
 
-    @GetMapping("buscar-usuario-cpf")
-    public ResponseEntity<Object> buscarUsuarioCpf(@RequestParam String cpf){
-        Usuario usuario = null;
-        for (Usuario u : usuarioRepository.getUsuarios()){
-            if(u.getCpf().equalsIgnoreCase(cpf))
-                usuario = u;
+    @DeleteMapping("{id}")
+    public ResponseEntity<Object> delete(@PathVariable Long id) {
+        if (usuarioService.delete(id)) {
+            return ResponseEntity.noContent().build();
         }
-        if(usuario != null){
-            return ResponseEntity.ok().body(usuario);
-        }
-        return ResponseEntity.badRequest().body("CPF não encontrado");
-    }
-
-    public void atualizarUsuario(@RequestParam Usuario usuario){
-        Boolean flag = false;
-        for(Usuario u : usuarioRepository.getUsuarios()){
-            if(u.getId() == usuario.getId()){
-                u.setNome(usuario.getNome());
-                u.setCpf(usuario.getCpf());
-                u.setEmail(usuario.getEmail());
-                u.setSenha(usuario.getSenha());
-                u.setTelefone(usuario.getTelefone());
-                flag = true;
-            }
-        }
-        if(flag)
-            ResponseEntity.ok().body("Usuário atualizado com sucesso");
-        else
-            ResponseEntity.badRequest().body("Usuário não encontrado");
-    }
-
-    public void deletarUsuario(@RequestParam Long id){
-        Boolean flag = false;
-        for(Usuario u : usuarioRepository.getUsuarios()){
-            if(u.getId() == id){
-                usuarioRepository.getUsuarios().remove(u);
-                flag = true;
-            }
-        }
-        if(flag)
-            ResponseEntity.ok().body("Usuário deletado com sucesso");
-        else
-            ResponseEntity.badRequest().body("Usuário não encontrado");
+        return ResponseEntity.badRequest().body(new Erro("Erro ao deletar"));
     }
 }

@@ -1,5 +1,7 @@
 package Model.Entidades;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
@@ -21,16 +23,20 @@ public class Contas {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Usuario_USU_ID", nullable = false)
+    @JsonIgnoreProperties(value = {"metas", "transacoes", "contas", "cartoes", "localizacao"}, allowSetters = true)
     private Usuario usuario;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "BANCOS_BANCOS_ID", nullable = false)
+    @JsonIgnoreProperties(value = {"contas"}, allowSetters = true)
     private Bancos banco;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Tipo_Contas_TIPOCONTAS_ID", nullable = false)
+    @JsonIgnoreProperties(value = {"contas"}, allowSetters = true)
     private TipoContas tipoContas;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "conta", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Transacao> transacoes;
 
