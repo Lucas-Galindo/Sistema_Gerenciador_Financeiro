@@ -1,5 +1,6 @@
 package Model.Entidades;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class TipoTransacao {
     @Column(name = "TIPO_TRANSACAO_DESCRICAO", length = 45)
     private String descricao;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "tipoTransacao", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Transacao> transacoes;
 

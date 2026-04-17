@@ -1,5 +1,6 @@
 package Model.Entidades;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.List;
 
@@ -27,19 +28,25 @@ public class Usuario {
     @Column(name = "USU_TEL", length = 45)
     private String telefone;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Metas> metas;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Transacao> transacoes;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Contas> contas;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Cartoes> cartoes;
 
-    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "Localizacao_LOCAL_ID")
     private Localizacao localizacao;
 
     public Long getId() { return id; }
@@ -64,6 +71,9 @@ public class Usuario {
     public void setCartoes(List<Cartoes> cartoes) { this.cartoes = cartoes; }
     public Localizacao getLocalizacao() { return localizacao; }
     public void setLocalizacao(Localizacao localizacao) { this.localizacao = localizacao; }
+
+    public Usuario() {
+    }
 
     public Usuario(String nome, String cpf, String email, String senha, String telefone) {
         this.nome = nome;

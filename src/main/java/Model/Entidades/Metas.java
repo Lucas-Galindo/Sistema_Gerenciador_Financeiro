@@ -1,5 +1,6 @@
 package Model.Entidades;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 
@@ -8,7 +9,6 @@ import java.math.BigDecimal;
 public class Metas {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "METAS_ID")
     private Long id;
 
@@ -26,6 +26,7 @@ public class Metas {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Usuario_USU_ID", nullable = false)
+    @JsonIgnoreProperties(value = {"metas", "transacoes", "contas", "cartoes", "localizacao"}, allowSetters = true)
     private Usuario usuario;
 
     public Long getId() { return id; }

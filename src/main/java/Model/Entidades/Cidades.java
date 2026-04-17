@@ -1,6 +1,7 @@
 package Model.Entidades;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.List;
 
@@ -9,13 +10,13 @@ import java.util.List;
 public class Cidades {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "CIDADES_ID")
     private Long id;
 
     @Column(name = "CIDADES_NOME", length = 45)
     private String nome;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "cidade", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Localizacao> localizacoes;
 

@@ -1,5 +1,6 @@
 package Model.Entidades;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 @Entity
@@ -7,7 +8,6 @@ import jakarta.persistence.*;
 public class Localizacao {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "LOCAL_ID")
     private Long id;
 
@@ -16,14 +16,16 @@ public class Localizacao {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Estados_ESTADOS_ID")
+    @JsonIgnoreProperties(value = {"localizacoes"}, allowSetters = true)
     private Estados estado;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Cidades_CIDADES_ID")
+    @JsonIgnoreProperties(value = {"localizacoes"}, allowSetters = true)
     private Cidades cidade;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "Usuario_USU_ID")
+    @OneToOne(mappedBy = "localizacao", fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = {"metas", "transacoes", "contas", "cartoes", "localizacao"}, allowSetters = true)
     private Usuario usuario;
 
     public Long getId() { return id; }

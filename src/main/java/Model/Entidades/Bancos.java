@@ -1,6 +1,7 @@
 package Model.Entidades;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.List;
 
@@ -9,13 +10,13 @@ import java.util.List;
 public  class Bancos {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "BANCOS_ID")
     private Long id;
 
     @Column(name = "BANCOS_NOME", length = 45)
     private String nome;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "banco", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Contas> contas;
 

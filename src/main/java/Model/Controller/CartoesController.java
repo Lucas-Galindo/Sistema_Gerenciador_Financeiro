@@ -1,63 +1,63 @@
 package Model.Controller;
 
-import Model.Entidades.Contas;
+import Model.Entidades.Cartoes;
 import Model.Entidades.Erro;
-import Model.Service.ContasService;
+import Model.Service.CartoesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("contas")
-public class ContasController {
+@RequestMapping("cartoes")
+public class CartoesController {
 
     @Autowired
-    private ContasService contasService;
+    private CartoesService cartoesService;
 
     @GetMapping("get-all")
-    public ResponseEntity<Object> getAllContas() {
-        return ResponseEntity.ok(contasService.getAll());
+    public ResponseEntity<Object> getAllCartoes() {
+        return ResponseEntity.ok(cartoesService.getAll());
     }
 
     @GetMapping("get-by-id/{id}")
     public ResponseEntity<Object> getById(@PathVariable Long id) {
-        Contas conta = contasService.getId(id);
-        if (conta != null) {
-            return ResponseEntity.ok(conta);
+        Cartoes cartao = cartoesService.getId(id);
+        if (cartao != null) {
+            return ResponseEntity.ok(cartao);
         }
-        return ResponseEntity.badRequest().body(new Erro("Conta nao existe"));
+        return ResponseEntity.badRequest().body(new Erro("Cartao nao existe"));
     }
 
     @GetMapping("get-by-usuario/{usuarioId}")
     public ResponseEntity<Object> getByUsuario(@PathVariable Long usuarioId) {
-        return ResponseEntity.ok(contasService.getByUsuarioId(usuarioId));
+        return ResponseEntity.ok(cartoesService.getByUsuarioId(usuarioId));
     }
 
     @GetMapping("get-by-keyword/{kw}")
     public ResponseEntity<Object> getByKeyWord(@PathVariable String kw) {
-        return ResponseEntity.ok(contasService.getByKeyWord(kw));
+        return ResponseEntity.ok(cartoesService.getByKeyWord(kw));
     }
 
     @PostMapping
-    public ResponseEntity<Object> add(@RequestBody Contas conta) {
-        conta = contasService.save(conta);
-        if (conta != null) {
-            return ResponseEntity.ok().body(conta);
+    public ResponseEntity<Object> add(@RequestBody Cartoes cartao) {
+        cartao = cartoesService.save(cartao);
+        if (cartao != null) {
+            return ResponseEntity.ok().body(cartao);
         }
         return ResponseEntity.badRequest().body(new Erro("Erro ao salvar"));
     }
 
     @PutMapping
-    public ResponseEntity<Object> update(@RequestBody Contas conta) {
-        if (contasService.save(conta) != null) {
-            return ResponseEntity.ok().body(conta);
+    public ResponseEntity<Object> update(@RequestBody Cartoes cartao) {
+        if (cartoesService.save(cartao) != null) {
+            return ResponseEntity.ok().body(cartao);
         }
         return ResponseEntity.badRequest().body(new Erro("Erro ao alterar"));
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<Object> delete(@PathVariable Long id) {
-        if (contasService.delete(id)) {
+        if (cartoesService.delete(id)) {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.badRequest().body(new Erro("Erro ao deletar"));
